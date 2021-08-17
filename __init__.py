@@ -18,8 +18,7 @@ def index():
 def webhook():
 
     #parse data from webhook
-    #targetIp = request.json['event']['target_ip']
-    targetIp = 'test'
+    targetIp = request.json['event']['target_ip']
     targetIp = str(targetIp)
 
     try:
@@ -29,7 +28,8 @@ def webhook():
         targetName = "unknown"
 
     #write host to log
-    logData = "Webhook received: " + str(targetIp)
+    #logData = "Webhook received: " + str(targetIp)
+    logData = 'test'
     writeLog(logData)
 
     #assign values to dict
