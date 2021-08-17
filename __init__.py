@@ -5,6 +5,8 @@ import json
 import requests
 from flask import Flask, request
 import urllib3
+import datetime
+
 
 urllib3.disable_warnings()
 
@@ -164,8 +166,14 @@ def updateGroup(groupMembers, newHost):
         writeLog(logData)
 
 def writeLog(logData):
+
+    #get date/time
+    now = datetime.datetime.now()
+    now = now.strftime("%Y-%m-%d %H:%M:%S  ")
+   
     #writes data to a logfile
     logData = str(logData)
+    logData = now + logData
     output = open("/var/www/flaskapps/ddc/webapp.log", "a")
     output.write(logData)
     output.write("\n")
