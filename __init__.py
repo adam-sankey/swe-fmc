@@ -14,15 +14,12 @@ app = Flask(__name__)
 def index():
     return "Hello World :-)"
 
-@app.route("/health", methods=["GET"])
-def health():
-    return "healthy af"
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
 
     #parse data from webhook
-    targetIp = request.json['event']['target_ip']
+    #targetIp = request.json['event']['target_ip']
+    targetIp = 'test'
     targetIp = str(targetIp)
 
     try:
