@@ -7,6 +7,12 @@ from flask import Flask, request
 import urllib3
 import datetime
 
+#environment-specific variables
+fmcHostName = "fmc.sankey.io"
+fmcAuthString = "YXBpOkMhc2NvMTIzNDU2Nw=="
+fmcDomain = "e276abec-e0f2-11e3-8169-6d9ed49b625f"
+fmcBlockGroupId = "000D3A3A-EE99-0ed3-0000-004294968227"
+fmcBlockGroupName = "malicious_ips"
 
 urllib3.disable_warnings()
 
@@ -14,9 +20,9 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
-    return "Hello World :-)"
+    return "StealthWatch Enterprise > FMC Integration"
 
-@app.route("/webhook", methods=["POST"])
+@app.route("/blockdns", methods=["POST"])
 def webhook():
 
     #parse data from webhook
@@ -57,9 +63,9 @@ def gettoken():
     #sends basic credentials to FMC and receives token
 
     #define request details
-    url = "https://fmc.sankey.io/api/fmc_platform/v1/auth/generatetoken"
+    url = "https://" + fmcHostName + "/api/fmc_platform/v1/auth/generatetoken"
     payload = {}
-    headers = {'Authorization': 'Basic YXBpOkMhc2NvMTIzNDU2Nw=='}
+    headers = {'Authorization': 'Basic ' + fmcAuthString}
 
     #make api request
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
@@ -80,7 +86,7 @@ def createHost(newHost):
     #creates new host object from webhook data
 
     #define request details
-    url = "https://fmc.sankey.io/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/object/hosts"
+    url = "https://" + fmcHostName + "/api/fmc_config/v1/domain/" + fmcDomain + "/object/hosts"
     payload = json.dumps({
         "name": newHost['name'],
         "type": "Host",
@@ -115,7 +121,7 @@ def getGroup(newHost):
     #get existing group members
 
     #define request details
-    url = "https://fmc.sankey.io/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/object/networkgroups/000D3A3A-EE99-0ed3-0000-004294968227"
+    url = "https://" + fmcHostName + "/api/fmc_config/v1/domain/" + fmcDomain + "/object/networkgroups/" + fmcBlockGroupId
     payload = ""
     headers = {'x-auth-access-token': newHost['apikey']}
 
@@ -139,10 +145,10 @@ def updateGroup(groupMembers, newHost):
     #updates group with existing members + new host
 
     #define request details
-    url = "https://fmc.sankey.io/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/object/networkgroups/000D3A3A-EE99-0ed3-0000-004294968227"
+    url = "https://" + fmcHostName + "/api/fmc_config/v1/domain/" + fmcDomain + "/object/networkgroups/" + fmcBlockGroupId
     payload = json.dumps({
-        "id": "000D3A3A-EE99-0ed3-0000-004294968227",
-        "name": "malicious_ips",
+        "id": fmcBlockGroupId,
+        "name": fmcBlockGroupName,
         "type": "NetworkGroup",
         "objects": groupMembers
     })
