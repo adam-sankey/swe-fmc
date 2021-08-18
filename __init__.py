@@ -8,7 +8,7 @@ import urllib3
 import datetime
 
 #environment-specific variables
-fmcHostName = "fmc.sankey.io"
+fmcHostName = "fmc.yourdomain.net"
 fmcAuthString = "YXBpOkMhc2NvMTIzNDU2Nw=="
 fmcDomain = "e276abec-e0f2-11e3-8169-6d9ed49b625f"
 fmcBlockGroupId = "000D3A3A-EE99-0ed3-0000-004294968227"
